@@ -33,14 +33,13 @@ to setup
 end
 
 to go
-    let sorted-turtles sort turtles
-    ; clear memories
+  let sorted-turtles sort turtles
 
-    foreach sorted-turtles [ ego ->
-      foreach sorted-turtles [ target ->
-        ask ego [ interact-with target ]
-        output-standings
-    ]]
+  foreach sorted-turtles [ ego ->
+    foreach sorted-turtles [ target ->
+      ask ego [ interact-with target ]
+      output-standings
+  ]]
 end
 
 to interact-with [ target ]
@@ -308,7 +307,7 @@ INPUTBOX
 139
 186
 reward
--2.0
+3.0
 1
 0
 Number
@@ -319,7 +318,7 @@ INPUTBOX
 223
 187
 sucker
--5.0
+0.0
 1
 0
 Number
@@ -330,7 +329,7 @@ INPUTBOX
 224
 254
 punishment
--4.0
+1.0
 1
 0
 Number
@@ -341,7 +340,7 @@ INPUTBOX
 137
 253
 temptation
-0.0
+5.0
 1
 0
 Number
@@ -367,41 +366,77 @@ TEXTBOX
 1
 
 @#$#@#$#@
+# Prisoner's Tournament 1.1.0
+
+Compatible with NetLogo 6.1.1
+
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+The purpose of this model is to demonstrate how different payoff structures, strategies, and players can affect the outcomes of prisoner’s dilemma games.
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+When the simulation runs, entities are repeatedly pitted against each other in a series of prisoner’s dilemma games that determine the relative payoffs of both players. Each player plays every other player twice per tournament. When a diad plays each other, they play ten games using the strategy determined by one of the ten letters of their behavioral strategy. For every game, a player can choose to either “cooperate” or “defect,” according to their behavioral strategy. If both players cooperate, they both receive the “reward” payoff amount. If one player cooperates and the other defects, the cooperating player receives the “sucker” payoff amount, and the defector receives the “temptation” payoff amount. If both players defect, then both receive the “punishment” payoff amount. The simulation ends once every player has played each other twice and all payoffs have been allocated. The “winning” strategy is that which received the highest total payoff in the tournament.
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+### Buttons
 
-## THINGS TO NOTICE
+Press SETUP after all of the input values have been chosen. This will initialize the program open a window to choose a data file. Choose any csv file that fulfills the following criteria: (1) there are two columns with the headers "name" and "strategy"; (2) any number of cells in the "name" column contain text to represent strategy names; (3) the same number of cells as in the "name" column are in the "strategy" column; and (4) the "strategy" column contains cells with the structure XXXXXXXXXX, each X representing any letter (R, C, D, T, W, A, V, G, S, K, H) and each letter representing a different strategy for choosing a decision (either cooperate or defect).
 
-(suggested things for the user to notice while running the model)
+Press GO to make the simulation continuously. When the simulation runs, entities are repeatedly pitted against each other in a series of prisoner’s dilemma games that determine the relative payoffs of both players. Each player plays every other player twice per tournament. When a diad plays each other, they play ten games using the strategy determined by one of the ten letters of their behavioral strategy. For every game, a player can choose to either “cooperate” or “defect,” according to their behavioral strategy. If both players cooperate, they both receive the “reward” payoff amount. If one player cooperates and the other defects, the cooperating player receives the “sucker” payoff amount, and the defector receives the “temptation” payoff amount. If both players defect, then both receive the “punishment” payoff amount. The simulation ends once every player has played each other twice and all payoffs have been allocated. The “winning” strategy is that which received the highest total payoff in the tournament.
+
+### INPUT PARAMETERS
+
+The REWARD input determines what payoff a player receives if both players choose to cooperate.
+
+The TEMPTATION input determines what payoff a player receives if they choose to defect and the other player chooses to cooperate.
+
+The SUCKER input determines what payoff a player recevies if they choose to cooperate and the other player chooses to defect.
+
+The PUNISHMENT input determines what payoff a player receives if both players choose to defect.
+
+### STRATEGIES
+
+Entities interact with each other by playing a series of ten prisoner’s dilemma games with each other, twice per tournament. During each game, both players choose their decision (cooperate or defect) before knowing what the other player will do. Each strategy for determining a decision is represented by a letter of the alphabet. The following contains a list of possible codes and their corresponding names and a description of the strategy.
+
+RANDOM [R] Randomly choose between DEFECT and COOPERATE.
+
+COOPERATE [C] No matter what, choose to COOPERATE.
+
+DEFECT [D] No matter what, choose to DEFECT.
+
+TIT FOR TAT [T] Match what your partner did in the previous round; If my opponent from the previous round cooperated with me, COOPERATE this round. If my opponent from the previous round defected against me, DEFECT this round. If this is the first round, COOPERATE.
+
+TIT FOR TWO TATS [W] This is a forgiving strategy that defects only when the opponent has defected twice in a row. If my opponent from both of the two previous rounds defected against me, DEFECT this round. Otherwise, COOPERATE. If this is the first round, COOPERATE.
+
+TWO TITS FOR TAT [A] This strategy, on the other hand, is a strategy that punishes every defection with two of its own. If my opponent from either of the previous two rounds defected against me, DEFECT this round. If this is the first round, COOPERATE.
+
+REVERSE TIT FOR TAT [V] Do the opposite of whatever your opponent did in the previous round. If my opponent from the previous round cooperated with me, DEFECT this round. If my opponent from the previous round defected against me, COOPERATE this round. If this is the first round, DEFECT.
+
+GRIM [G] If my opponent defected at any point during our interaction, DEFECT this round.
+
+SOFT MAJORITY [S] If the total number of times that my opponent has cooperated with me exceeds the number of times that they defected, COOPERATE this round.
+
+HARD MAJORITY [K] If the total number of times that my opponent has defected with me exceeds the number of times that they cooperated, DEFECT this round.
+
+HANDSHAKE [H] If my opponent opens the first round with DEFECT, the second with COOPERATE, and the third with DEFECT (DCD is the handshake, or signal of friendliness to other players), they are considered a friend and COOPERATE from this round on.
 
 ## THINGS TO TRY
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+What happens when you change some of the input parameters to negative values? How does that alter the payoff structure and tournament results? Which strategies do well and which ones do poorly? Which strategy combination is able to consistently win in tournaments? Does this depend on what the other player strategies are?
 
-## EXTENDING THE MODEL
+## HOW TO CITE
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+Crouse, Kristin (2019). “Prisoner’s Tournament” (Version 1.1.0). CoMSES Computational Model Library. Retrieved from: https://www.comses.net/codebases/9191e043-5341-478b-95dd-cbc8503a502a/releases/1.1.0/
 
-## NETLOGO FEATURES
+## COPYRIGHT AND LICENSE
 
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+© 2019 K N Crouse.
 
-## RELATED MODELS
+The model may be freely used, modified and redistributed provided this copyright is included and the resulting models are not used for profit.
 
-(models in the NetLogo Models Library and elsewhere which are of related interest)
-
-## CREDITS AND REFERENCES
-
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+Contact K N Crouse at crou0048@umn.edu if you have questions about its use.
 @#$#@#$#@
 default
 true
